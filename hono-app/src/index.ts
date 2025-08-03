@@ -1,13 +1,28 @@
-import { Hono } from 'hono'
+import { Hono } from "hono";
 
-const app = new Hono()
+const app = new Hono();
+//  trying to create a middleware
+async function authMiddleware(c: any, next: any) {
+  if (c.req.header("Auth")) {
+    await next()
+  } else {
+    return c.text("you dont have access");
+  }
+}
 
-app.post('/', async(c) => {
-  const body = await c.req.json() 
-  console.log(body) ;
-  console.log(c.req.header("Authorization")) 
-  console.log(c.req.query("param"))
-  return c.text('Hello Hono!')
-})
+//app.use(authMiddleware);    // it will run for every request 
 
-export default app
+
+// authmiddleware run for only this request 
+app.get("/", authMiddleware , async (c) => {
+  return c.text("heelo");
+});
+app.post("/", async (c) => {
+  const body = await c.req.json();
+  console.log(body);
+  // console.log(c.req.header("Authorization"))
+  // console.log(c.req.query("param"))
+  return c.text("Hello Hono!");
+});
+
+export default app;
