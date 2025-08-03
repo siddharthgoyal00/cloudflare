@@ -17,4 +17,9 @@ to deploy the application on the cloud flare :-
 npx wrangler login 
 npx wrangler whoami
 npm run deploy 
+ 
 
+create a hono application 
+npm create hono@latest myapp  
+
+cloudflare workers examples 
